@@ -1,3 +1,5 @@
+use std::process;
+
 use crate::token::{Token, TokenType};
 
 pub struct Scanner<'s> {
@@ -42,7 +44,7 @@ impl<'s> Scanner<'s> {
                 } else if self.peek_word("pow") {
                     self.tokens.push(Token::new(TokenType::POW, 0, self.line));
                 } else {
-                    panic!("Unexpected character at {}:{}", self.line, self.current)
+                    self.throw_error("Unexpected character");
                 }
             }
             'm' => {
@@ -53,7 +55,7 @@ impl<'s> Scanner<'s> {
                 } else if self.peek_word("minus") {
                     self.tokens.push(Token::new(TokenType::MINUS, 0, self.line));
                 } else {
-                    panic!("Unexpected character at {}:{}", self.line, self.current)
+                    self.throw_error("Unexpected character");
                 }
             }
             'd' => {
@@ -62,7 +64,7 @@ impl<'s> Scanner<'s> {
                     self.tokens
                         .push(Token::new(TokenType::DIVIDE, 0, self.line));
                 } else {
-                    panic!("Unexpected character at {}:{}", self.line, self.current)
+                    self.throw_error("Unexpected character");
                 }
             }
             ' ' => {}
@@ -72,7 +74,7 @@ impl<'s> Scanner<'s> {
             _ => {
                 // Continuar lendo se o proximo caracter for um numero
                 if !character.is_numeric() {
-                    panic!("Unexpected character at {}:{}", self.line, self.current)
+                    self.throw_error("Unexpected character");
                 }
 
                 let mut num_value_str = String::from(character);
@@ -133,5 +135,15 @@ impl<'s> Scanner<'s> {
         } else {
             Some(self.source.as_bytes()[self.current] as char)
         }
+    }
+}
+
+
+/// Temporary error sender
+impl<'s> Scanner<'s> {
+    fn throw_error(&self, text: &str) {
+        println!("== 3RR0R ==");
+        println!("[{}:{}] {}", self.line, self.current, text);
+        process::exit(0);
     }
 }
