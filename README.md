@@ -37,3 +37,7 @@ cargo run
 - [ ] AST It's not in it's best form (There's a few bugs to fix)
 - [ ] Add unary-expressions (It's only binary for now)
 - [ ] Add power operator, and brackets 
+
+---
+### Obs
+I know, I know, the syntax tree is not great (_for now_).
