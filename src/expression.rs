@@ -4,7 +4,7 @@ pub enum Expression {
     BINARY(Box<Expression>, TokenType, Box<Expression>),
     UNARY(TokenType, Box<Expression>),
     LITERAL(i32),
-    NONE
+    NONE,
 }
 
 impl Expression {
@@ -27,10 +27,8 @@ impl Expression {
                 print!(" (");
                 print!("{}", value);
                 print!(") ");
-            },
-            Self::NONE => {
-
             }
+            Self::NONE => {}
         }
     }
 }

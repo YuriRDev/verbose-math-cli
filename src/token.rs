@@ -10,7 +10,7 @@ pub enum TokenType {
 
 pub struct Token {
     pub token_type: TokenType,
-    value: i32,
+    pub value: i32,
     line: usize,
 }
 

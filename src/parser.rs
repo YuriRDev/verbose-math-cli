@@ -31,7 +31,7 @@ impl<'s> Parser<'s> {
             TokenType::NUMBER => {
                 return token_unwrap.get_value();
             }
-            TokenType::MINUS => return left + right,
+            TokenType::MINUS => return left - right,
             TokenType::PLUS => return left + right,
             TokenType::DIVIDE => return left / right,
             TokenType::MULTIPLY => return left * right,
@@ -44,6 +44,11 @@ impl<'s> Parser<'s> {
         let next_plus = self.get_plus(esq, dir);
         if next_plus.is_some() {
             return Some(next_plus.unwrap());
+        };
+
+        let next_minus = self.get_minus(esq, dir);
+        if next_minus.is_some() {
+            return Some(next_minus.unwrap());
         };
 
         let next_mult = self.get_mult(esq, dir);
@@ -66,6 +71,16 @@ impl<'s> Parser<'s> {
                 TokenType::PLUS => {
                     return Some(cnt);
                 }
+                _ => {}
+            }
+        }
+        None
+    }
+
+    fn get_minus(&self, esq: usize, dir: usize) -> Option<usize> {
+        for cnt in esq..dir {
+            let current_token = &self.tokens[cnt].token_type;
+            match current_token {
                 TokenType::MINUS => {
                     return Some(cnt);
                 }
