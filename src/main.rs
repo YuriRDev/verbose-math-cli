@@ -1,17 +1,16 @@
 mod scanner;
 mod token;
+mod parser;
+mod expression;
+use expression::Expression;
+use parser::Parser;
+
 use crate::scanner::Scanner;
 
 use std::{env::{self, Args}, process};
 
 fn main() {
-    // let mut a = Scanner::new("1 + 4 * 10 / 4");
     collect_args(env::args());
-
-    let mut a = Scanner::new("5 plus 821231 pow 2 plus 4 plus 9");
-    a.scan();
-    a.print_tokens();
-    
 }
 
 fn collect_args(args: Args) {
@@ -21,7 +20,7 @@ fn collect_args(args: Args) {
         process::exit(0);
     } else {
         let mut scanner = Scanner::new(&args[1]);
-        scanner.scan();
-        scanner.print_tokens();
+        let mut parser = Parser::new(scanner.scan()).parse();
+        println!("{}", parser);
     }
 }

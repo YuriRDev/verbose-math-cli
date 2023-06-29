@@ -1,5 +1,4 @@
 use std::process;
-
 use crate::token::{Token, TokenType};
 
 pub struct Scanner<'s> {
@@ -20,10 +19,12 @@ impl<'s> Scanner<'s> {
         }
     }
 
-    pub fn scan(&mut self) {
+    pub fn scan(&mut self) -> &Vec<Token> {
         while !self.is_at_end() {
             self.scan_token();
         }
+
+        &self.tokens
     }
 
     pub fn print_tokens(&self) {
