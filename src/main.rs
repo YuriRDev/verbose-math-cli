@@ -1,13 +1,14 @@
+mod parser;
 mod scanner;
 mod token;
-mod parser;
-mod expression;
-use expression::Expression;
 use parser::Parser;
 
 use crate::scanner::Scanner;
 
-use std::{env::{self, Args}, process};
+use std::{
+    env::{self, Args},
+    io::{self, BufRead},
+};
 
 fn main() {
     collect_args(env::args());
@@ -15,12 +16,19 @@ fn main() {
 
 fn collect_args(args: Args) {
     let args: Vec<String> = args.collect();
-    if args.len() < 2 {
-        println!("Usage: cargo run \"5 plus 8 multiply 3\" ");
-        process::exit(0);
-    } else {
+    if args.len() == 2 {
         let mut scanner = Scanner::new(&args[1]);
-        let mut parser = Parser::new(scanner.scan()).parse();
+        let parser = Parser::new(scanner.scan()).parse();
         println!("{}", parser);
+    } else {
+        println!("Type your query");
+        let mut line = String::new();
+        let stdin = io::stdin();
+        loop {
+            stdin.lock().read_line(&mut line).unwrap();
+            let mut scanner = Scanner::new(&line);
+            let parser = Parser::new(scanner.scan()).parse();
+            println!("{}", parser);
+        }
     }
 }

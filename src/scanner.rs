@@ -1,6 +1,5 @@
-use std::process;
-use crate::expression::*;
 use crate::token::{Token, TokenType};
+use std::process;
 
 pub struct Scanner<'s> {
     source: &'s str,
@@ -27,12 +26,6 @@ impl<'s> Scanner<'s> {
 
         &self.tokens
     }
-
-    pub fn print_tokens(&self) {
-        for value in &self.tokens {
-            value.print();
-        }
-    }
 }
 
 impl<'s> Scanner<'s> {
@@ -42,9 +35,9 @@ impl<'s> Scanner<'s> {
         match character {
             'p' => {
                 if self.peek_word("plus") {
-                    self.tokens.push(Token::new(TokenType::PLUS, 0, self.line));
+                    self.tokens.push(Token::new(TokenType::PLUS, 0));
                 } else if self.peek_word("pow") {
-                    self.tokens.push(Token::new(TokenType::POW, 0, self.line));
+                    self.tokens.push(Token::new(TokenType::POW, 0));
                 } else {
                     self.throw_error("Unexpected character");
                 }
@@ -52,10 +45,9 @@ impl<'s> Scanner<'s> {
             'm' => {
                 // Multiply, Minus
                 if self.peek_word("multiply") {
-                    self.tokens
-                        .push(Token::new(TokenType::MULTIPLY, 0, self.line));
+                    self.tokens.push(Token::new(TokenType::MULTIPLY, 0));
                 } else if self.peek_word("minus") {
-                    self.tokens.push(Token::new(TokenType::MINUS, 0, self.line));
+                    self.tokens.push(Token::new(TokenType::MINUS, 0));
                 } else {
                     self.throw_error("Unexpected character");
                 }
@@ -63,8 +55,7 @@ impl<'s> Scanner<'s> {
             'd' => {
                 // Divide
                 if self.peek_word("divide") {
-                    self.tokens
-                        .push(Token::new(TokenType::DIVIDE, 0, self.line));
+                    self.tokens.push(Token::new(TokenType::DIVIDE, 0));
                 } else {
                     self.throw_error("Unexpected character");
                 }
@@ -95,7 +86,6 @@ impl<'s> Scanner<'s> {
                 self.tokens.push(Token::new(
                     TokenType::NUMBER,
                     num_value_str.trim().parse().unwrap(),
-                    self.line,
                 ));
             }
         }
@@ -140,12 +130,10 @@ impl<'s> Scanner<'s> {
     }
 }
 
-
 /// Temporary error sender
 impl<'s> Scanner<'s> {
     fn throw_error(&self, text: &str) {
-        println!("== 3RR0R ==");
-        println!("[{}:{}] {}", self.line, self.current, text);
+        println!("[Error] {} at {}:{}", text, self.line, self.current);
         process::exit(0);
     }
 }
